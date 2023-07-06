@@ -6,17 +6,24 @@ import {
   Post,
   StreamableFile,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileService } from './services/file.service';
 import { join } from 'path';
 import { createReadStream } from 'fs';
+import { ApiTags } from '@nestjs/swagger';
+import { GetUser } from '~/common/decorators/get-user.decorator';
+import { ITokenPayload } from '../auth/types/token.interface';
+import AccessTokenGuard from '../auth/guards/access-token.guard';
 
+@ApiTags('file')
 @Controller('file')
 export class FileController {
   constructor(private readonly fileService: FileService) {}
 
+  @UseGuards(AccessTokenGuard)
   @Post('/image')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -40,12 +47,9 @@ export class FileController {
       // },
     }),
   )
-  async uploadImage(
-    // @GetUser() token: ITokenPayload,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
+  async uploadImage(@GetUser() token: ITokenPayload, @UploadedFile() file: Express.Multer.File) {
     if (!file) throw new BadRequestException('no file uploaded');
-    return this.fileService.saveImage(file);
+    return this.fileService.saveImage(file, token.sub);
   }
 
   @Get('/gallery')
@@ -55,7 +59,7 @@ export class FileController {
   }
 
   @Get('/:path')
-  seeUploadedFile(@Param('path') path: string): StreamableFile {
+  downloadFile(@Param('path') path: string): StreamableFile {
     console.log('###############################', path);
 
     const file = createReadStream(join(process.cwd(), 'uploads', path));

@@ -11,12 +11,13 @@ export class FileService {
     private readonly configService: ConfigService,
   ) {}
 
-  async saveImage(file: Express.Multer.File) {
+  async saveImage(file: Express.Multer.File, userId: number) {
     const fileModel = this.fileRepo.create({
-      name: file.originalname,
+      filename: file.originalname,
       filepath: file.filename,
       mimetype: file.mimetype,
       size: file.size,
+      createUserId: userId,
     });
     return this.fileRepo.save(fileModel);
   }
@@ -27,7 +28,7 @@ export class FileService {
       id: img.id,
       filepath: img.filepath,
       src: `http://${this.configService.get('app.url')}:${this.configService.get('app.port')}/file/${img.filepath}`,
-      name: img.name,
+      name: img.filename,
     }));
   }
 }

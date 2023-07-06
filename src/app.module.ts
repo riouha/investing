@@ -7,6 +7,7 @@ import { PostModule } from './modules/post/post.module';
 import { CategoryModule } from './modules/category/category.module';
 import { FileModule } from './modules/file/file.module';
 import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -29,10 +30,11 @@ import { UserModule } from './modules/user/user.module';
         } as PostgresConnectionOptions),
       inject: [ConfigService],
     }),
+    AuthModule,
+    UserModule,
     PostModule,
     CategoryModule,
     FileModule,
-    UserModule,
   ],
   controllers: [],
   providers: [],

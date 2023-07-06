@@ -9,17 +9,23 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Investing Api Documentation')
-    .addBasicAuth({
-      type: 'http',
-      flows: {
-        password: {
-          tokenUrl: '/api/v1/auth/login',
-          refreshUrl: '/api/v1/auth/refresh-token',
-          scopes: {},
+    .addBearerAuth(
+      {
+        name: 'Access-Token',
+        type: 'oauth2',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        flows: {
+          password: {
+            tokenUrl: '/auth/login',
+            refreshUrl: '/auth/refresh-token',
+            scopes: {},
+          },
         },
       },
-    })
-    .addBearerAuth({ type: 'http' })
+      'Access-Token',
+    )
+    .addBearerAuth({ name: 'Bearer', type: 'http', bearerFormat: 'bearer' }, 'Bearer')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-doc', app, document);

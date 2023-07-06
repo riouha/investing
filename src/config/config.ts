@@ -16,8 +16,10 @@ export const appConfig = () => ({
     dropSchema: process.env.DB_DROPSCHEMA === 'true',
   },
   auth: {
-    jwtSecret: process.env.JWT_SECRET,
-    jwtExpiration: process.env.JWT_EXPIRATION,
+    accessTokenSecret: process.env.ACCESS_TOKEN_SECRET,
+    accessTokenExpiration: process.env.ACCESS_TOKEN_EXPIRATION,
+    refreshTokenSecret: process.env.REFERESH_TOKEN_SECRET,
+    refreshTokenExpiration: process.env.REFERESH_TOKEN_EXPIRATION,
   },
   minio: {
     endPoint: process.env.MINIO_HOST,

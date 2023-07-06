@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from '~/modules/user/entities/user.entity';
 
 @Entity()
 export class File {
@@ -9,7 +10,7 @@ export class File {
   filepath: string;
 
   @Column()
-  name: string;
+  filename: string;
 
   @Column({ type: 'int8', nullable: true })
   size: number;
@@ -18,16 +19,11 @@ export class File {
   mimetype: string;
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  //   @Column()
-  //   createUserId: number;
-  //   @ManyToOne(() => User)
-  //   createUser: User;
+  @Column()
+  createUserId: number;
+  @ManyToOne(() => User)
+  createUser: User;
+
   @CreateDateColumn({ type: 'timestamp' })
   createDate: Date;
-
-  constructor(filepath: string, mimetype: string, size: number) {
-    this.filepath = filepath;
-    this.mimetype = mimetype;
-    this.size = size;
-  }
 }

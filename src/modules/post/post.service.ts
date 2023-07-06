@@ -16,11 +16,11 @@ export class PostService {
     });
   }
 
-  async createPost(dto: CreatePostDto) {
+  async createPost(dto: CreatePostDto, userId: number) {
     const post = this.postRepo.create(dto);
     post.type = 'Post';
     // post.slug = Date.now().toString();
-    post.createUserId = 1;
+    post.createUserId = userId;
     return this.postRepo.save(post);
   }
 
