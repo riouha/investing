@@ -1,4 +1,4 @@
-import { IsIn, IsOptional, IsString } from 'class-validator';
+import { IsIn, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreatePostDto {
   @IsString()
@@ -15,4 +15,14 @@ export class CreatePostDto {
 
   @IsString()
   thumbnail: string;
+}
+
+export class SearchPostsDto {
+  @IsOptional()
+  @IsNumber()
+  page?: number;
+
+  @IsOptional()
+  @IsNumber()
+  pageSize?: number;
 }

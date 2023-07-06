@@ -7,7 +7,7 @@ export class User {
   id: number;
 
   @Column({ unique: true })
-  mobile: string;
+  phone: string;
 
   @Exclude()
   @Column()

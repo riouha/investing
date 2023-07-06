@@ -24,7 +24,7 @@ export class AuthService {
     const [accessToken, refreshToken] = await Promise.all([
       this.getAccessToken({
         sub: user.id,
-        mobile: user.mobile,
+        phone: user.phone,
         active: user.isActive,
       }),
       this.getRefreshToken({ sub: user.id }),
@@ -37,7 +37,7 @@ export class AuthService {
     const user = await this.userService.getUserById(id);
     return this.getAccessToken({
       sub: user.id,
-      mobile: user.mobile,
+      phone: user.phone,
       active: user.isActive,
     });
   }

@@ -2,7 +2,7 @@ import { IsPhoneNumber, IsString } from 'class-validator';
 
 export class LoginDto {
   @IsPhoneNumber('IR')
-  mobile: string;
+  username: string;
 
   @IsString()
   password: string;
@@ -10,7 +10,7 @@ export class LoginDto {
 
 export class SignupDto {
   @IsPhoneNumber('IR')
-  mobile: string;
+  phone: string;
 
   @IsString()
   password: string;

@@ -2,18 +2,26 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { Post } from './entities/post.entity';
-import { CreatePostDto } from './dtos/post.dto';
+import { CreatePostDto, SearchPostsDto } from './dtos/post.dto';
+import { pageToOffsetLimit } from '~/common/utils';
 
 @Injectable()
 export class PostService {
   constructor(@InjectRepository(Post) private postRepo: Repository<Post>) {}
 
-  async sarchPosts() {
-    return this.postRepo.find({
+  async sarchPosts(dto: SearchPostsDto) {
+    const { offset, limit } = pageToOffsetLimit(dto.page ?? 1, dto.pageSize ?? 100);
+    const [posts, count] = await this.postRepo.findAndCount({
       where: { type: In(['Post', 'RssPost']), status: 'Published' },
       relations: ['createUser'],
       order: { publishDate: 'DESC' },
+      take: limit,
+      skip: offset,
     });
+    return {
+      posts,
+      count,
+    };
   }
 
   async createPost(dto: CreatePostDto, userId: number) {

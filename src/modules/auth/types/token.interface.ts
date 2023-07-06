@@ -1,6 +1,6 @@
 export interface ITokenPayload {
   sub: number;
-  mobile: string;
+  phone: string;
   active: boolean;
 }
 

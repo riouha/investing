@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { PostService } from './post.service';
-import { CreatePostDto } from './dtos/post.dto';
-import { Param, UseGuards } from '@nestjs/common/decorators';
+import { CreatePostDto, SearchPostsDto } from './dtos/post.dto';
+import { Param, Query, UseGuards } from '@nestjs/common/decorators';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import AccessTokenGuard from '../auth/guards/access-token.guard';
 import { ITokenPayload } from '../auth/types/token.interface';
@@ -20,14 +20,13 @@ export class PostController {
 
   // @UseInterceptors(ClassSerializerInterceptor)
   @Get('/')
-  async searchPosts() {
-    return this.postService.sarchPosts();
+  async searchPosts(@Query() dto: SearchPostsDto) {
+    return this.postService.sarchPosts(dto);
   }
 
   // @UseInterceptors(ClassSerializerInterceptor)
 
   @ApiBearerAuth('Access-Token')
-  @UsePipes(ValidationPipe)
   @UseGuards(AccessTokenGuard)
   @Post('/')
   async createPost(@GetUser() token: ITokenPayload, @Body() dto: CreatePostDto) {

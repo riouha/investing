@@ -16,21 +16,21 @@ export class UserService {
     return user;
   }
   async createUser(dto: SignupDto) {
-    const duplicate = await this.userRepo.findOne({ where: { mobile: dto.mobile }, select: { id: true } });
-    if (duplicate) throw new ConflictException('mobile is duplicate');
+    const duplicate = await this.userRepo.findOne({ where: { phone: dto.phone }, select: { id: true } });
+    if (duplicate) throw new ConflictException('phone is duplicate');
 
     const user = new User();
-    user.mobile = dto.mobile;
+    user.phone = dto.phone;
     user.password = await this.hashPassword(dto.password);
     return this.userRepo.save(user);
   }
 
   async validateUser(dto: LoginDto) {
-    const user = await this.userRepo.findOne({ where: { mobile: dto.mobile } });
-    if (!user) throw new UnauthorizedException('incorrect mobile or password');
+    const user = await this.userRepo.findOne({ where: { phone: dto.username } });
+    if (!user) throw new UnauthorizedException('incorrect user or password');
 
     const isValid = await this.validatePassword(user.password, dto.password);
-    if (!isValid) throw new UnauthorizedException('incorrect mobile or password');
+    if (!isValid) throw new UnauthorizedException('incorrect user or password');
     return user;
   }
 
