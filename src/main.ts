@@ -6,6 +6,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { CustomExceptionFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
+  console.log(process.env);
+
   const app = await NestFactory.create(AppModule);
   app.enableCors();
 
