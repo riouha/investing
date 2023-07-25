@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Controller,
   Get,
+  NotFoundException,
   Param,
   Post,
   StreamableFile,
@@ -12,17 +13,32 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileService } from './services/file.service';
 import { join } from 'path';
-import { createReadStream } from 'fs';
-import { ApiTags } from '@nestjs/swagger';
+import { createReadStream, exists, existsSync } from 'fs';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { GetUser } from '~/common/decorators/get-user.decorator';
 import { ITokenPayload } from '../auth/types/token.interface';
 import AccessTokenGuard from '../auth/guards/access-token.guard';
+import { promisify } from 'util';
 
 @ApiTags('file')
 @Controller('file')
 export class FileController {
   constructor(private readonly fileService: FileService) {}
 
+  @ApiBearerAuth('Access-Token')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+      required: ['file'],
+    },
+  })
   @UseGuards(AccessTokenGuard)
   @Post('/image')
   @UseInterceptors(
@@ -60,9 +76,9 @@ export class FileController {
 
   @Get('/:path')
   downloadFile(@Param('path') path: string): StreamableFile {
-    console.log('###############################', path);
-
-    const file = createReadStream(join(process.cwd(), 'uploads', path));
+    const masir = join(process.cwd(), 'uploads', path);
+    if (!existsSync(masir)) throw new NotFoundException('file not found');
+    const file = createReadStream(masir);
     return new StreamableFile(file, { type: 'image', disposition: 'inline' });
 
     // return res.sendFile(path, { root: join(__dirname, '../../../uploads') });
