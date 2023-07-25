@@ -13,9 +13,14 @@ export class PostController {
   constructor(private readonly postService: PostService) {}
 
   // @UseInterceptors(ClassSerializerInterceptor)
-  @Get('/:slug')
+  @Get('/slug/:slug')
   async getPostBySlug(@Param('slug') slug: string) {
     return this.postService.getPostBySlug(slug);
+  }
+
+  @Get('/:id')
+  async getPostById(@Param('id') id: number) {
+    return this.postService.getPost(id);
   }
 
   // @UseInterceptors(ClassSerializerInterceptor)

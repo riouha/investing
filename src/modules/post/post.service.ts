@@ -37,4 +37,10 @@ export class PostService {
     if (!post) throw new NotFoundException('post not found');
     return post;
   }
+
+  async getPost(id: number) {
+    const post = this.postRepo.findOne({ where: { id } });
+    if (!post) throw new NotFoundException('post not found');
+    return post;
+  }
 }
