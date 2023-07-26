@@ -8,6 +8,7 @@ import { CategoryModule } from './modules/category/category.module';
 import { FileModule } from './modules/file/file.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { CurrencyModule } from './modules/currecies/currency.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { AuthModule } from './modules/auth/auth.module';
     PostModule,
     CategoryModule,
     FileModule,
+    CurrencyModule,
   ],
   controllers: [],
   providers: [],
