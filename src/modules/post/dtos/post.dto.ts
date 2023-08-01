@@ -1,4 +1,5 @@
-import { IsIn, IsNumber, IsOptional, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsIn, IsInt, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreatePostDto {
   @IsString()
@@ -15,6 +16,10 @@ export class CreatePostDto {
 
   @IsString()
   thumbnail: string;
+
+  @IsOptional()
+  @IsInt({ each: true })
+  categoryIds?: number[];
 }
 
 export class SearchPostsDto {
@@ -25,4 +30,12 @@ export class SearchPostsDto {
   @IsOptional()
   @IsNumber()
   pageSize?: number;
+
+  @IsOptional()
+  @IsInt()
+  categoryId?: number;
+
+  @IsOptional()
+  @IsIn(['Published', 'Draft'])
+  status?: 'Draft' | 'Published';
 }
